@@ -3,7 +3,14 @@ This repository contains a collection of n8n automation templates. These templat
 
 👉 [Join n8n and start automating now! 💎](https://n8n.partnerlinks.io/h1pwwf5m4toe)
 <a href="https://n8n.partnerlinks.io/h1pwwf5m4toe">
-  <img src="/img/n8n.png" alt="n8n" style="max-height: 300px;">
+  <img src="./img/n8n.png" alt="n8n" style="max-height: 20px;">
 </a>
----
 
+## Social Media Genartor
+AI Powered Social Media Content Generator transforms a single topic into platform-specific content for LinkedIn, X (Twitter), and Instagram using a LLM of your preferred choice.
+
+### Workflow:
+✅ Topic Input
+✅ AI Content Generation
+✅ JSON Parsing with JavaScript
+✅ Automated Data Storage in Google Sheets
