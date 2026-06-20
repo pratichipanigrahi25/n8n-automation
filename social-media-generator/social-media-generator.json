@@ -1,0 +1,243 @@
+{
+  "name": "social media generator",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -768,
+        -64
+      ],
+      "id": "89fcb696-b5d5-47f6-9d14-5e84d6e3ee8b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "43cdc551-ea4b-4361-8bc0-3f33a8a30d23",
+              "name": "=topic",
+              "value": "AI automation for small businesses",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -544,
+        -64
+      ],
+      "id": "41c21ebc-0dbb-41f7-9252-b419ed7b0265",
+      "name": "AI automation for small businesses"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional social media marketer.\n\nTopic:\n{{$json.topic}}\n\nCreate:\n\n1. A LinkedIn post (150-200 words)\n2. A Twitter/X post (max 280 characters)\n3. An Instagram caption\n\nReturn ONLY valid JSON in this format:\n\n{\n  \"linkedin\": \"...\",\n  \"twitter\": \"...\",\n  \"instagram\": \"...\"\n}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -320,
+        -64
+      ],
+      "id": "eeaf8ec4-2089-448d-9a01-8f20494a168f",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        144
+      ],
+      "id": "48ff6d5e-0a4b-4700-9b9c-67f4344d0b90",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "5uHiowij8o795yzH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json.text;\n\nconst cleaned = raw\n  .replace(/```json/g, '')\n  .replace(/```/g, '')\n  .trim();\n\nconst parsed = JSON.parse(cleaned);\n\nreturn [\n  {\n    json: {\n      linkedin: parsed.linkedin,\n      twitter: parsed.twitter,\n      instagram: parsed.instagram\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        -64
+      ],
+      "id": "1c169b17-b418-46b2-8cc8-ee6f2f9c82fb",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "15T1H6tvvU95QmM65AopSrnN3Iz7y406vlxTVxST6qpE",
+          "mode": "list",
+          "cachedResultName": "social media spreadsheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15T1H6tvvU95QmM65AopSrnN3Iz7y406vlxTVxST6qpE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15T1H6tvvU95QmM65AopSrnN3Iz7y406vlxTVxST6qpE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "topic": "AI automation for small businesses",
+            "linkedin": "={{$json.linkedin}}",
+            "twitter": "={{$json.twitter}}",
+            "instagram": "={{$json.instagram}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "linkedin",
+              "displayName": "linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "twitter",
+              "displayName": "twitter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "instagram",
+              "displayName": "instagram",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        -64
+      ],
+      "id": "a6a94695-f021-4e28-a0de-d7854aa014f9",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "A6L0A8zWzpyIVqqE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI automation for small businesses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI automation for small businesses": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "9efb1cdf-522d-400f-9b2f-c5bc198b848b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7550d16f3ae8e4d58e1a5a0064e9c7da12799de7f3528b65bd32c08c3d13fdfc"
+  },
+  "id": "2LL5zNVrrVT1jD87",
+  "tags": []
+}
